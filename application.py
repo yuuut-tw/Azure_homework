@@ -48,7 +48,7 @@ def handle_message(event):
       # "HELP": "https://developers.line.biz/zh-hant/docs/messaging-api/",
       "YOUTUBE": "https://www.youtube.com/"}
     message = event.message.text.upper()
-    if message in url_dict.keys():
+    if message in list(url_dict.keys()):
         with open(f"templates/{message}.json", "r") as f_r:
             bubble = json.load(f_r)
         f_r.close()
