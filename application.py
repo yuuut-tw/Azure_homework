@@ -47,11 +47,11 @@ def handle_message(event):
       "YOUTUBE": "YOUTUBE.json",
       "GOSSIP": "GOSSIP.json"}
 
-    message = event.message.text
+    message = event.message.text.upper()
 
     # If message is the key of json_dict, then load the json file and show on the chat.
     try:
-        json_file = json_dict[message.upper()]
+        json_file = json_dict[message]
         with open(f"templates/{json_file}", "r") as f_r:
             bubble = json.load(f_r)
         # f_r.close()
@@ -59,7 +59,7 @@ def handle_message(event):
                                [FlexSendMessage(alt_text="Report", contents=bubble)])
 
     except:
-        message = TextSendMessage(text=message)
+        message = TextSendMessage(text=event.message.text)
         LINE_BOT.reply_message(event.reply_token, message)
 
 
