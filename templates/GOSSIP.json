@@ -1,0 +1,39 @@
+{
+  "type": "bubble",
+  "hero": {
+    "type": "image",
+    "url": "https://media2.vivstars.com/2019/04/gossip-story-kolumna-Vivstars-portal.jpg",
+    "size": "full",
+    "aspectMode": "cover",
+    "position": "relative"
+  },
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "I can tell you lots of secrets",
+        "weight": "bold",
+        "align": "center",
+        "style": "italic",
+        "position": "relative",
+        "size": "lg"
+      },
+      {
+        "type": "button",
+        "action": {
+          "type": "uri",
+          "label": "website",
+          "uri": "https://www.ptt.cc/bbs/Gossiping/index.html"
+        },
+        "style": "primary"
+      }
+    ],
+    "action": {
+      "type": "uri",
+      "label": "website",
+      "uri": "https://www.ptt.cc/bbs/Gossiping/index.html"
+    }
+  }
+}
