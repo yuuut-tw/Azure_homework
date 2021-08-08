@@ -1,0 +1,37 @@
+{
+  "type": "bubble",
+  "hero": {
+    "type": "image",
+    "url": "https://cdn.pixabay.com/photo/2021/02/16/06/00/youtube-logo-6019878_960_720.png",
+    "size": "full",
+    "aspectRatio": "20:13",
+    "aspectMode": "cover",
+    "action": {
+      "type": "uri",
+      "uri": "http://linecorp.com/"
+    }
+  },
+  "footer": {
+    "type": "box",
+    "layout": "vertical",
+    "spacing": "sm",
+    "contents": [
+      {
+        "type": "button",
+        "style": "primary",
+        "height": "sm",
+        "action": {
+          "type": "uri",
+          "label": "website",
+          "uri": "https://www.youtube.com/"
+        },
+        "position": "relative"
+      },
+      {
+        "type": "spacer",
+        "size": "sm"
+      }
+    ],
+    "flex": 0
+  }
+}
