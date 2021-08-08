@@ -43,22 +43,23 @@ def callback():
 @HANDLER.add(MessageEvent, message=TextMessage)
 def handle_message(event):
 
-    url_dict = {
-      "TIBAME": "https://www.tibame.com/coursegoodjob/traffic_cli",
-      "HELP": "https://developers.line.biz/zh-hant/docs/messaging-api/",
-      "YOUTUBE": "https://www.youtube.com/"}
+    json_dict = {
+      "YOUTUBE": "YOUTUBE.json",
+      "GOSSIP": "GOSSIP.json"}
 
+    message = event.message.text
 
-    message = event.message.text.upper()
-    if message == "YOUTUBE": #list(url_dict.keys()):
-        with open(f"templates/{message}.json", "r") as f_r:
+    # If message is the key of json_dict, then load the json file and show on the chat.
+    try:
+        json_file = json_dict[message.upper()]
+        with open(f"templates/{json_file}", "r") as f_r:
             bubble = json.load(f_r)
-        f_r.close()
+        # f_r.close()
         LINE_BOT.reply_message(event.reply_token,
                                [FlexSendMessage(alt_text="Report", contents=bubble)])
 
-    else:
-        message = TextSendMessage(text=event.message.text)
+    except:
+        message = TextSendMessage(text=message)
         LINE_BOT.reply_message(event.reply_token, message)
 
 
