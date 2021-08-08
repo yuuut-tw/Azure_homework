@@ -49,12 +49,12 @@ def handle_message(event):
       "YOUTUBE": "https://www.youtube.com/"}
 
     try:
-        message = url_dict[event.message.text.upper()]
+        message = event.message.text.upper()
         with open(f"templates/{message}.json", "r") as f_r:
             bubble = json.load(f_r)
         f_r.close()
         LINE_BOT.reply_message(event.reply_token,
-                               [FlexSendMessage(alt_text="Report", contents=bubble)])
+                               FlexSendMessage(alt_text="Report", contents=bubble))
 
     except:
         message = TextSendMessage(text=event.message.text)
