@@ -50,16 +50,16 @@ def handle_message(event):
 
     try:
         message = event.message.text.upper()
-        with open(f"templates/{message}.json", "r") as f_r:
-            bubble = json.load(f_r)
-        f_r.close()
-        LINE_BOT.reply_message(event.reply_token,
-                               [FlexSendMessage(alt_text="Report", contents=bubble)])
+        if message in list(url_dict.keys()):
+            with open(f"templates/{message}.json", "r") as f_r:
+                bubble = json.load(f_r)
+            f_r.close()
+            LINE_BOT.reply_message(event.reply_token,
+                                   [FlexSendMessage(alt_text="Report", contents=bubble)])
 
     except:
         message = TextSendMessage(text=event.message.text)
-
-    LINE_BOT.reply_message(event.reply_token, message)
+        LINE_BOT.reply_message(event.reply_token, message)
 
 
     # 將要發出去的文字變成TextSendMessage
