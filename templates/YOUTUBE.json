@@ -2,7 +2,7 @@
   "type": "bubble",
   "hero": {
     "type": "image",
-    "url": "https://media.bnextmedia.com.tw/image/album/2017-08/img-1504041061-21603@900.gif",
+    "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHXE523ZM16q4GXQl5EAzAfS4am2Utgvz4B9IZfKbDKZ954J8DSLb02o6mvhtznTW0LRA&usqp=CAU",
     "size": "full",
     "aspectRatio": "20:13",
     "aspectMode": "cover",
@@ -16,7 +16,7 @@
     "contents": [
       {
         "type": "text",
-        "text": "I can show you the world ^^",
+        "text": "I can show you the world",
         "weight": "bold",
         "style": "italic",
         "position": "relative",
