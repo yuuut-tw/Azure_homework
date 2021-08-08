@@ -26,10 +26,6 @@
           "uri": "https://www.youtube.com/"
         },
         "position": "relative"
-      },
-      {
-        "type": "spacer",
-        "size": "sm"
       }
     ],
     "flex": 0
