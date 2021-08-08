@@ -41,9 +41,9 @@ def callback():
 @HANDLER.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     url_dict = {
-      "TIBAME":"https://www.tibame.com/coursegoodjob/traffic_cli",
-      "HELP":"https://developers.line.biz/zh-hant/docs/messaging-api/",
-      "Youtube": "https://www.youtube.com/"}
+      "TIBAME": "https://www.tibame.com/coursegoodjob/traffic_cli",
+      "HELP": "https://developers.line.biz/zh-hant/docs/messaging-api/",
+      "YOUTUBE": "https://www.youtube.com/"}
 
 # 將要發出去的文字變成TextSendMessage
     try:
