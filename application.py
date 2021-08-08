@@ -44,20 +44,22 @@ def callback():
 def handle_message(event):
 
     url_dict = {
-      # "TIBAME": "https://www.tibame.com/coursegoodjob/traffic_cli",
-      # "HELP": "https://developers.line.biz/zh-hant/docs/messaging-api/",
+      "TIBAME": "https://www.tibame.com/coursegoodjob/traffic_cli",
+      "HELP": "https://developers.line.biz/zh-hant/docs/messaging-api/",
       "YOUTUBE": "https://www.youtube.com/"}
-    message = event.message.text.upper()
-    if message in list(url_dict.keys()):
+
+    try:
+        message = url_dict[event.message.text.upper()]
         with open(f"templates/{message}.json", "r") as f_r:
             bubble = json.load(f_r)
         f_r.close()
         LINE_BOT.reply_message(event.reply_token,
-                               [FlexSendMessage(alt_text="Report", contents=bubble)]
-    )
+                               [FlexSendMessage(alt_text="Report", contents=bubble)])
 
-    else:
-        LINE_BOT.reply_message(event.reply_token, message)
+    except:
+        message = TextSendMessage(text=event.message.text)
+
+    LINE_BOT.reply_message(event.reply_token, message)
 
 
     # 將要發出去的文字變成TextSendMessage
