@@ -2,14 +2,33 @@
   "type": "bubble",
   "hero": {
     "type": "image",
-    "url": "https://cdn.pixabay.com/photo/2021/02/16/06/00/youtube-logo-6019878_960_720.png",
+    "url": "https://media.bnextmedia.com.tw/image/album/2017-08/img-1504041061-21603@900.gif",
     "size": "full",
     "aspectRatio": "20:13",
     "aspectMode": "cover",
     "action": {
       "type": "uri",
       "uri": "http://linecorp.com/"
-    }
+    },
+    "gravity": "bottom",
+    "position": "relative"
+  },
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "I can show you the world ^^",
+        "weight": "bold",
+        "style": "italic",
+        "position": "relative",
+        "adjustMode": "shrink-to-fit",
+        "gravity": "center",
+        "wrap": false,
+        "align": "center"
+      }
+    ]
   },
   "footer": {
     "type": "box",
@@ -19,10 +38,10 @@
       {
         "type": "button",
         "style": "primary",
-        "height": "sm",
+        "height": "md",
         "action": {
           "type": "uri",
-          "label": "website",
+          "label": "Let's go",
           "uri": "https://www.youtube.com/"
         },
         "position": "relative"
