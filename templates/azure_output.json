@@ -17,11 +17,13 @@
     "contents": [
       {
         "type": "text",
-        "text": "text output",
         "weight": "bold",
-        "size": "xl",
-        "style": "italic",
-        "color": "#0000ff"
+        "size": "md",
+        "style": "normal",
+        "color": "#005500",
+        "wrap": true,
+        "text": "output",
+        "margin": "xs"
       }
     ],
     "background": {
