@@ -133,6 +133,35 @@ def azure_face_recognition(filename):
 
     return person.name
 
+# 定義光學OCR
+def azure_ocr(url):
+    """
+    Azure OCR: get characters from image url
+    """
+    ocr_results = CV_CLIENT.read(url, raw=True)
+    # Get the operation location (URL with an ID at the end) from the response
+    operation_location_remote = ocr_results.headers["Operation-Location"]
+    # Grab the ID from the URL
+    operation_id = operation_location_remote.split("/")[-1]
+    # Call the "GET" API and wait for it to retrieve the results
+    while True:
+        get_handw_text_results = CV_CLIENT.get_read_result(operation_id)
+        if get_handw_text_results.status not in ["notStarted", "running"]:
+            break
+        time.sleep(1)
+
+    # Get detected text
+    text = []
+    if get_handw_text_results.status == OperationStatusCodes.succeeded:
+        for text_result in get_handw_text_results.analyze_result.read_results:
+            for line in text_result.lines:
+                if len(line.text) <= 8:
+                    text.append(line.text)
+    # Filter text for Taiwan license plate
+    r = re.compile("[0-9A-Z]{2,4}[.-]{1}[0-9A-Z]{2,4}")
+    text = list(filter(r.match, text))
+    return text[0].replace(".", "-") if len(text) > 0 else ""
+
 
 @HANDLER.add(MessageEvent, message=ImageMessage) # 檢查輸入是否為image
 def handle_content_message(event):
@@ -144,12 +173,18 @@ def handle_content_message(event):
             f_w.write(chunk)
     f_w.close()
     image = IMGUR_CLIENT.image_upload(filename, "first", "first")
-    #link = image["response"]["data"]["link"]
+    link = image["response"]["data"]["link"]
+    # 人臉
     name = azure_face_recognition(filename)
+    # 車牌
+    plate = azure_ocr(link)
 
     if name != "":
         now = datetime.now(timezone(timedelta(hours=8))).strftime("%Y-%m-%d %H:%M")
         output = "{0}, {1}".format(name, now)
+
+    elif len(plate) > 0:
+        output = "License Plate: {}".format(plate)
 
     else:
         output = "unknown"
@@ -157,3 +192,5 @@ def handle_content_message(event):
     output = TextSendMessage(text=output)
     LINE_BOT.reply_message(event.reply_token,
                            output)
+
+
