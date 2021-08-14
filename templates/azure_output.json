@@ -8,7 +8,7 @@
     "aspectMode": "cover",
     "action": {
       "type": "uri",
-      "uri": ""
+      "uri": "http://linecorp.com/"
     }
   },
   "body": {
