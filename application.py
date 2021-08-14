@@ -150,9 +150,10 @@ def handle_content_message(event):
     if name != "":
         now = datetime.now(timezone(timedelta(hours=8))).strftime("%Y-%m-%d %H:%M")
         output = "{0}, {1}".format(name, now)
+
     else:
         output = "unknown"
-        output = TextSendMessage(text=output)
 
+    output = TextSendMessage(text=output)
     LINE_BOT.reply_message(event.reply_token,
                            output)
