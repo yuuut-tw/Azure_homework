@@ -14,6 +14,7 @@ from linebot.models import (
     FlexSendMessage,
     ImageMessage)
 
+from PIL import Image, ImageDraw, ImageFont
 from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes
 from azure.cognitiveservices.vision.face import FaceClient
@@ -164,6 +165,47 @@ def azure_ocr(url):
     text = list(filter(r.match, text))
     return text[0].replace(".", "-") if len(text) > 0 else ""
 
+# 物件描述
+def azure_describe(url):
+    """
+    Output azure image description result
+    """
+    description_results = CV_CLIENT.describe_image(url)
+    output = ""
+    for caption in description_results.captions:
+        output += "'{}' with confidence {:.2f}% \n".format(
+            caption.text, caption.confidence * 100
+        )
+    return output
+
+# 定義物件偵測函數
+def azure_object_detection(url, filename):
+    img = Image.open(filename)
+    draw = ImageDraw.Draw(img)
+    font_size = int(5e-2 * img.size[1])
+    fnt = ImageFont.truetype("static/TaipeiSansTCBeta-Regular.ttf", size=font_size)
+    object_detection = CV_CLIENT.detect_objects(url)
+    if len(object_detection.objects) > 0:
+        for obj in object_detection.objects:
+            left = obj.rectangle.x
+            top = obj.rectangle.y
+            right = obj.rectangle.x + obj.rectangle.w
+            bot = obj.rectangle.y + obj.rectangle.h
+            name = obj.object_property
+            confidence = obj.confidence
+            print("{} at location {}, {}, {}, {}".format(name, left, right, top, bot))
+            draw.rectangle([left, top, right, bot], outline=(255, 0, 0), width=3)
+            draw.text(
+                [left, top + font_size],
+                "{} {}".format(name, confidence),
+                fill=(255, 0, 0),
+                font=fnt,
+            )
+    img.save(filename)
+    image = IMGUR_CLIENT.image_upload(filename, "", "")
+    link = image["response"]["data"]["link"]
+    os.remove(filename)
+    return link
 
 @HANDLER.add(MessageEvent, message=ImageMessage) # 檢查輸入是否為image
 def handle_content_message(event):
@@ -180,6 +222,8 @@ def handle_content_message(event):
     name = azure_face_recognition(filename)
     # 車牌
     plate = azure_ocr(link)
+    # 物件偵測
+    link_ob = azure_object_detection(link, filename)
 
     if name != "":
         now = datetime.now(timezone(timedelta(hours=8))).strftime("%Y-%m-%d %H:%M")
@@ -187,6 +231,9 @@ def handle_content_message(event):
 
     elif len(plate) > 0:
         output = "License Plate: {}".format(plate)
+
+    elif link_ob != "":
+        output = azure_describe(link)
 
     else:
         output = "unknown"
