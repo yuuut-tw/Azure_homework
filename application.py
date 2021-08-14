@@ -193,7 +193,7 @@ def azure_object_detection(url, filename):
             bot = obj.rectangle.y + obj.rectangle.h
             name = obj.object_property
             confidence = obj.confidence
-            #print("{} at location {}, {}, {}, {}".format(name, left, right, top, bot))
+            print("{} at location {}, {}, {}, {}".format(name, left, right, top, bot))
             draw.rectangle([left, top, right, bot], outline=(255, 0, 0), width=3)
             draw.text(
                 [left, top + font_size],
@@ -238,16 +238,14 @@ def handle_content_message(event):
     else:
         output = "unknown"
 
-
-    # output = TextSendMessage(text=output)
-    # LINE_BOT.reply_message(event.reply_token,
-    #                        output)
-
-    with open("templates/detect_result.json", "r") as f_r:
+    with open("templates/azure_output.json", "r") as f_r:
         bubble = json.load(f_r)
     f_r.close()
-    bubble["body"]["contents"][0]["contents"][0]["contents"][0]["text"] = output
-    bubble["header"]["contents"][0]["contents"][0]["contents"][0]["url"] = link
+    #bubble["body"]["contents"][0]["contents"][0]["contents"][0]["text"] = output
+    #bubble["header"]["contents"][0]["contents"][0]["contents"][0]["url"] = link
+    bubble["hero"]["url"] = link
+    bubble["body"]["contents"][0]["text"] = output
+
     LINE_BOT.reply_message(
         event.reply_token, [FlexSendMessage(alt_text="Report", contents=bubble)]
     )
