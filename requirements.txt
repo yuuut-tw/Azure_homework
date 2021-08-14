@@ -6,5 +6,6 @@ Jinja2==2.10
 Werkzeug==0.14.1
 line-bot-sdk
 azure-cognitiveservices-vision-computervision
+azure.cognitiveservices.vision.face
 imgur-python
 Pillow
