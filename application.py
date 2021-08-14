@@ -238,7 +238,7 @@ def handle_content_message(event):
     else:
         output = "unknown"
 
-    link = link_ob
+        link = link_ob
     # output = TextSendMessage(text=output)
     # LINE_BOT.reply_message(event.reply_token,
     #                        output)
