@@ -103,9 +103,9 @@ def handle_message(event):
         message = TextSendMessage(text=event.message.text)
         LINE_BOT.reply_message(event.reply_token, message)
 
-# azure 功能
-# ================================================================
 
+# Azure 功能
+# ================================================================
 
 # 定義人臉辨識函數
 def azure_face_recognition(filename):
@@ -231,14 +231,14 @@ def handle_content_message(event):
 
     elif len(plate) > 0:
         output = "License Plate: {}".format(plate)
-
+        link = link_ob
     elif link_ob != "":
         output = azure_describe(link)
-
+        link = link_ob
     else:
         output = "unknown"
 
-        link = link_ob
+
     # output = TextSendMessage(text=output)
     # LINE_BOT.reply_message(event.reply_token,
     #                        output)
