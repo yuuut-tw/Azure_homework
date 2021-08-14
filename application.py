@@ -1,4 +1,5 @@
 import os
+import re
 import time
 import json
 from imgur_python import Imgur
