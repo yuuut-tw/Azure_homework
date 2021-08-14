@@ -1,5 +1,6 @@
 import os
 import json
+from imgur_python import Imgur
 from datetime import datetime, timezone, timedelta
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
