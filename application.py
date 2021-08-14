@@ -44,10 +44,10 @@ PERSON_GROUP_ID = "tibame"
 
 # Imgur
 IMGUR_CONFIG = {
-  "IMGUR_ID": os.getenv("IMGUR_ID"),
-  "IMGUR_SECRET": os.getenv("IMGUR_SECRET"),
-  "IMGUR_ACCESS_TOKEN": os.getenv("IMGUR_ACCESS_TOKEN"),
-  "IMGUR_REFRESH_TOKEN": os.getenv("IMGUR_REFRESH_TOKEN")
+  "client_id": os.getenv("IMGUR_ID"),
+  "client_secret": os.getenv("IMGUR_SECRET"),
+  "access_token": os.getenv("IMGUR_ACCESS_TOKEN"),
+  "refresh_token": os.getenv("IMGUR_REFRESH_TOKEN")
 }
 
 IMGUR_CLIENT = Imgur(config=IMGUR_CONFIG)
