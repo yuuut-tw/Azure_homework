@@ -13,17 +13,15 @@ from linebot.models import (
     TextSendMessage,
     FlexSendMessage,
     ImageMessage)
-
 from PIL import Image, ImageDraw, ImageFont
 from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes
 from azure.cognitiveservices.vision.face import FaceClient
 from msrest.authentication import CognitiveServicesCredentials
 
-
 app = Flask(__name__)
 
-# Configuration
+### Configuration
 # ===============================================================
 
 # LineChat Bot
@@ -55,8 +53,7 @@ IMGUR_CONFIG = {
 
 IMGUR_CLIENT = Imgur(config=IMGUR_CONFIG)
 
-
-# APP content
+### APP 功能(文字、圖片)
 # ===============================================================
 
 @app.route("/")
@@ -80,7 +77,9 @@ def callback():
     return "OK"
 
 
-# message 可以針對收到的訊息種類
+# Line Bot for 文字訊息
+# ===============================================================
+
 @HANDLER.add(MessageEvent, message=TextMessage)
 def handle_message(event):
 
@@ -104,14 +103,15 @@ def handle_message(event):
         LINE_BOT.reply_message(event.reply_token, message)
 
 
-# Azure 功能
-# ================================================================
+# Azure 圖片辨識
+# ===============================================================
 
-# 定義人臉辨識函數
+# 定義各項功能(人臉辨識、光學辨識、物件描述、物件偵測)
+# 人臉辨識函數
 def azure_face_recognition(filename):
     PERSON_GROUP_ID = "cfb101"
     FACE_CLIENT = FaceClient(FACE_END, CognitiveServicesCredentials(FACE_KEY))
-    img = open(filename, "r+b")  # read binary
+    img = open(filename, "r+b")
     detected_face = FACE_CLIENT.face.detect_with_stream(img,
                                                         detection_model="detection_01")
     # 多於一張臉的情況
@@ -136,7 +136,7 @@ def azure_face_recognition(filename):
 
     return person.name
 
-# 定義光學OCR
+# 光學OCR函數(for車牌)
 def azure_ocr(url):
     """
     Azure OCR: get characters from image url
@@ -165,7 +165,7 @@ def azure_ocr(url):
     text = list(filter(r.match, text))
     return text[0].replace(".", "-") if len(text) > 0 else ""
 
-# 物件描述
+# 物件描述函數
 def azure_describe(url):
     """
     Output azure image description result
@@ -178,7 +178,7 @@ def azure_describe(url):
         )
     return output
 
-# 定義物件偵測函數
+# 物件偵測函數
 def azure_object_detection(url, filename):
     img = Image.open(filename)
     draw = ImageDraw.Draw(img)
@@ -207,7 +207,8 @@ def azure_object_detection(url, filename):
     os.remove(filename)
     return link
 
-@HANDLER.add(MessageEvent, message=ImageMessage) # 檢查輸入是否為image
+# LineBot For 圖片訊息
+@HANDLER.add(MessageEvent, message=ImageMessage)
 def handle_content_message(event):
 
     filename = "{}.jpg".format(event.message.id)
@@ -241,11 +242,9 @@ def handle_content_message(event):
     with open("templates/azure_output.json", "r") as f_r:
         bubble = json.load(f_r)
     f_r.close()
-    #bubble["body"]["contents"][0]["contents"][0]["contents"][0]["text"] = output
-    #bubble["header"]["contents"][0]["contents"][0]["contents"][0]["url"] = link
     bubble["hero"]["url"] = link
     bubble["body"]["contents"][0]["text"] = output
 
     LINE_BOT.reply_message(
-        event.reply_token, [FlexSendMessage(alt_text="Report", contents=bubble)]
+        event.reply_token, [FlexSendMessage(alt_text="Detected Result ", contents=bubble)]
     )
