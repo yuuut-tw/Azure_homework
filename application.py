@@ -1,4 +1,5 @@
 import os
+import time
 import json
 from imgur_python import Imgur
 from datetime import datetime, timezone, timedelta
