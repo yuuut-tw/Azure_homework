@@ -193,7 +193,7 @@ def azure_object_detection(url, filename):
             bot = obj.rectangle.y + obj.rectangle.h
             name = obj.object_property
             confidence = obj.confidence
-            print("{} at location {}, {}, {}, {}".format(name, left, right, top, bot))
+            #print("{} at location {}, {}, {}, {}".format(name, left, right, top, bot))
             draw.rectangle([left, top, right, bot], outline=(255, 0, 0), width=3)
             draw.text(
                 [left, top + font_size],
