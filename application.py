@@ -242,7 +242,7 @@ def handle_content_message(event):
         output = "{0}, {1}".format(name, now)
 
     elif len(ocr_result) > 0:
-        if len(ocr_result[0]) == 11:
+        if len(ocr_result) == 11:
             output = "Invoice number: {}".format(ocr_result)
         else:
             output = "License Plate: {}".format(ocr_result)
