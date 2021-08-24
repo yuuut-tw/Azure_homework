@@ -56,6 +56,7 @@ IMGUR_CLIENT = Imgur(config=IMGUR_CONFIG)
 ### APP 功能(文字、圖片)
 # ===============================================================
 
+# hello test
 @app.route("/")
 def hello():
     "hello world"
