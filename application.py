@@ -159,10 +159,10 @@ def azure_ocr(url):
     if get_handw_text_results.status == OperationStatusCodes.succeeded:
         for text_result in get_handw_text_results.analyze_result.read_results:
             for line in text_result.lines:
-                if len(line.text) <= 8:
+                if len(line.text) <= 11: ### 犯人!!!
                     text.append(line.text)
 
-    # 車牌辨識 & 發票辨識
+    # 車牌辨識 & 發票辨識(開發中，辨識不出發票，待找出原因)
     r_plate = re.compile("[0-9A-Z]{2,4}[.-]{1}[0-9A-Z]{2,4}")
     r_invoice = re.compile("[A-Z]{2}[.-]{1}[0-9]{8}")
     matched_plate = list(filter(r_plate.match, text))
