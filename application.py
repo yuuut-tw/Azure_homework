@@ -161,9 +161,19 @@ def azure_ocr(url):
             for line in text_result.lines:
                 if len(line.text) <= 8:
                     text.append(line.text)
-    # Filter text for Taiwan license plate
-    r = re.compile("[0-9A-Z]{2,4}[.-]{1}[0-9A-Z]{2,4}")
-    text = list(filter(r.match, text))
+
+    # 車牌辨識 & 發票辨識
+    r_plate = re.compile("[0-9A-Z]{2,4}[.-]{1}[0-9A-Z]{2,4}")
+    r_invoice = re.compile("[A-Z]{2}[-][1-9]{8}")
+    matched_plate = list(filter(r_plate.match, text))
+    matched_invoice = list(filter(r_invoice.match, text))
+    if len(matched_plate) > 0:
+        text = matched_plate
+    elif len(matched_invoice) > 0:
+        text = matched_invoice
+    else:
+        text = []
+
     return text[0].replace(".", "-") if len(text) > 0 else ""
 
 # 物件描述函數
