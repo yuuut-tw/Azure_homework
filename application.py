@@ -163,18 +163,18 @@ def azure_ocr(url):
                     text.append(line.text)
 
     # 車牌辨識 & 發票辨識
-    #r_plate = re.compile("[0-9A-Z]{2,4}[.-]{1}[0-9A-Z]{2,4}")
-    r_invoice = re.compile("[A-Z]{2}[0-9]{8}") # [.-]{1}
-    #matched_plate = list(filter(r_plate.match, text))
+    r_plate = re.compile("[0-9A-Z]{2,4}[.-]{1}[0-9A-Z]{2,4}")
+    r_invoice = re.compile("[A-Z]{2}[.-]{1}[0-9]{8}")
+    matched_plate = list(filter(r_plate.match, text))
     matched_invoice = list(filter(r_invoice.match, text))
-    #if len(matched_plate) > 0:
-    #    text = matched_plate
-    if len(matched_invoice) > 0:
-        text = matched_invoice
+    if len(matched_plate) > 0:
+        result = matched_plate
+    elif len(matched_invoice) > 0:
+        result = matched_invoice
     else:
-        text = []
+        result = []
 
-    return text[0].replace(".", "-") if len(text) > 0 else ""
+    return result[0].replace(".", "-") if len(result) > 0 else ""
 
 # 物件描述函數
 def azure_describe(url):
