@@ -9,3 +9,5 @@ azure-cognitiveservices-vision-computervision
 azure.cognitiveservices.vision.face
 imgur-python
 Pillow
+requests
+bs4
