@@ -19,6 +19,9 @@ from azure.cognitiveservices.vision.computervision.models import OperationStatus
 from azure.cognitiveservices.vision.face import FaceClient
 from msrest.authentication import CognitiveServicesCredentials
 
+import requests
+from bs4 import BeautifulSoup
+
 app = Flask(__name__)
 
 ### Configuration
@@ -137,6 +140,60 @@ def azure_face_recognition(filename):
 
     return person.name
 
+# 發票號碼
+def invoice_numbers():
+    # 財政部中獎號碼網站(自動更新至最新一期)
+    url = 'http://invoice.etax.nat.gov.tw/'
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36'}
+    res = requests.get(url, headers=headers)
+    res.encoding = "utf8"
+    soup = BeautifulSoup(res.text, 'html.parser')
+
+    # 只爬最新一期號碼(area1, area2為上期)
+    nums = soup.select("div[id='area1']")[0].select("tr span")
+    x = [i.text for i in nums]
+
+    # 建立中獎號碼字典
+    number_dict = {'1000萬': x[0],
+                   '200萬': x[1],
+                   '其他獎': x[2].split('、'),
+                   '200元': x[3]}
+
+    return number_dict
+
+# 確認輸入發票有無中獎
+def invoice_number_check(number):
+    lottery_num = invoice_numbers()
+    number = number.split("-")[1]
+    minimum_prize = list(map(lambda x: x[-3:], lottery_num["其他獎"]))
+    other_prize = {8: "20萬", 7: "4萬", 6: "1萬", 5: '4000', 4: '1000', 3: '200'}
+   # result = ""
+    # 1000萬
+    if number == lottery_num["1000萬"]:
+        result = "1000萬"
+    # 200萬
+    elif number == lottery_num["200萬"]:
+        result = "200萬"
+    elif number[-3:] == lottery_num["200元"]:
+        result = '200'
+    else:
+        # 末3碼沒有相同，直接結束
+        if number[-3:] not in minimum_prize:
+            result = "Sorry! no match this time"
+        # 其他獎項
+        else:
+            check_result = []
+            for i in range(3, 9):
+                output = list(map(lambda x: x[-i:], lottery_num["其他獎"]))
+                n = number[-i:]
+                if n in output:
+                    check_result.append(len(n))
+                else:
+                    break
+            result = other_prize[max(check_result)]
+
+    return result
+
 # 光學OCR函數(for車牌)
 def azure_ocr(url):
     """
@@ -232,7 +289,7 @@ def handle_content_message(event):
     link = image["response"]["data"]["link"]
     # 人臉
     name = azure_face_recognition(filename)
-    # 車牌
+    # 車牌&發票
     ocr_result = azure_ocr(link)
     # 物件偵測
     link_ob = azure_object_detection(link, filename)
@@ -243,7 +300,11 @@ def handle_content_message(event):
 
     elif len(ocr_result) > 0:
         if len(ocr_result) == 11:
-            output = "Invoice number: {}".format(ocr_result)
+            check_result = invoice_number_check(ocr_result)
+            output = f"""
+                     Invoice number: {ocr_result}
+                     prize: {check_result}
+                     """
         else:
             output = "License Plate: {}".format(ocr_result)
         link = link_ob
