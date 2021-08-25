@@ -176,7 +176,7 @@ def invoice_number_check(number):
     else:
         # 確認末3碼有無中獎
         if number[-3:] not in minimum_prize:
-            result = "Sorry! You're not the chosen ones this time!"
+            result = "Oops! Good luck next time"
         # 其他獎項(頭獎~六獎)
         else:
             check_result = []
@@ -298,7 +298,7 @@ def handle_content_message(event):
     elif len(ocr_result) > 0:
         if len(ocr_result) == 11:
             check_result = invoice_number_check(ocr_result)
-            output = "**Invoice Number:** {0} \n**Prize:** {1}".format(ocr_result, check_result)
+            output = "Invoice Number: {0} \nPrize: {1}".format(ocr_result, check_result)
         else:
             output = "License Plate: {}".format(ocr_result)
         link = link_ob
