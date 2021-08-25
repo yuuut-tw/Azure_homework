@@ -19,7 +19,8 @@
         "color": "#005500",
         "wrap": true,
         "text": "output",
-        "margin": "xs"
+        "margin": "xs",
+        "align": "start"
       }
     ],
     "background": {
