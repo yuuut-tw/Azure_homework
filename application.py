@@ -148,46 +148,43 @@ def invoice_numbers():
     res = requests.get(url, headers=headers)
     res.encoding = "utf8"
     soup = BeautifulSoup(res.text, 'html.parser')
-
     # 只爬最新一期號碼(area1, area2為上期)
     nums = soup.select("div[id='area1']")[0].select("tr span")
     x = [i.text for i in nums]
-
     # 建立中獎號碼字典
-    number_dict = {'1000萬': x[0],
+    lottery_num = {'1000萬': x[0],
                    '200萬': x[1],
                    '其他獎': x[2].split('、'),
                    '200元': x[3]}
-
-    return number_dict
+    return lottery_num
 
 # 確認輸入發票有無中獎
 def invoice_number_check(number):
     lottery_num = invoice_numbers()
     number = number.split("-")[1]
     minimum_prize = list(map(lambda x: x[-3:], lottery_num["其他獎"]))
-    other_prize = {8: "20萬", 7: "4萬", 6: "1萬", 5: '4000', 4: '1000', 3: '200'}
-   # result = ""
-    # 1000萬
+    other_prize = {8:"20萬", 7:"4萬", 6:"1萬", 5:'4000', 4:'1000', 3:'200'}
+    # 1000萬(特別獎)
     if number == lottery_num["1000萬"]:
         result = "1000萬"
-    # 200萬
+    # 200萬(特獎)
     elif number == lottery_num["200萬"]:
         result = "200萬"
+    # 200元(增開六獎)
     elif number[-3:] == lottery_num["200元"]:
         result = '200'
     else:
-        # 末3碼沒有相同，直接結束
+        # 確認末3碼有無中獎
         if number[-3:] not in minimum_prize:
-            result = "Sorry! no match this time"
-        # 其他獎項
+            result = "Sorry! You're not the chosen ones this time!"
+        # 其他獎項(頭獎~六獎)
         else:
             check_result = []
             for i in range(3, 9):
                 output = list(map(lambda x: x[-i:], lottery_num["其他獎"]))
-                n = number[-i:]
-                if n in output:
-                    check_result.append(len(n))
+                num = number[-i:]
+                if num in output:
+                    check_result.append(len(num))
                 else:
                     break
             result = other_prize[max(check_result)]
@@ -219,7 +216,7 @@ def azure_ocr(url):
                 if len(line.text) <= 11: # Here!!
                     text.append(line.text)
 
-    # 車牌辨識 & 發票辨識(開發中，辨識不出發票，待找出原因) => 上面的每行字數限制調整
+    # 車牌辨識 & 發票辨識(辨識不出發票，待找出原因) => 上面的每行字數限制調整
     r_plate = re.compile("[0-9A-Z]{2,4}[.-]{1}[0-9A-Z]{2,4}")
     r_invoice = re.compile("[A-Z]{2}[.-]{1}[0-9]{8}")
     matched_plate = list(filter(r_plate.match, text))
@@ -301,7 +298,7 @@ def handle_content_message(event):
     elif len(ocr_result) > 0:
         if len(ocr_result) == 11:
             check_result = invoice_number_check(ocr_result)
-            output = "Invoice number: {0} \nprize: {1}".format(ocr_result, check_result)
+            output = "**Invoice Number:** {0} \n**Prize:** {1}".format(ocr_result, check_result)
         else:
             output = "License Plate: {}".format(ocr_result)
         link = link_ob
