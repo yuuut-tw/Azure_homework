@@ -27,6 +27,9 @@ This is the customized Line ChatBot with some fancy AI functions.
 5. Invoice Recognition: <br/>
    **The bot can not only extract the number on invoice, but check whether it's winning the latest Taiwan invoice-lottery numbers** <br/>
    Note: can only check the number but not yet for date so far! 
-
+<p float="left">
+  <img src="https://github.com/yuuut-tw/Azure_homework/blob/master/Function%20Demo/%E7%99%BC%E7%A5%A8%E8%99%9F%E7%A2%BC%E8%BE%A8%E8%AD%98%26%E5%B0%8D%E7%8D%8E(%E6%B2%92%E4%B8%AD).jpg" width="100" />
+  <img src="https://github.com/yuuut-tw/Azure_homework/blob/master/Function%20Demo/%E7%99%BC%E7%A5%A8%E8%99%9F%E8%B2%B7%E8%BE%A8%E8%AD%98%26%E5%B0%8D%E7%8D%8E(%E9%A0%AD%E7%8D%8E).jpg" width="100" /> 
+</p>
 ## Functions that might be added in the near future
 - Multiple face recognition
