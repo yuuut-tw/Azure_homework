@@ -302,7 +302,7 @@ def handle_content_message(event):
         if len(ocr_result) == 11:
             check_result = invoice_number_check(ocr_result)
             output = f"""
-                     Invoice number: {ocr_result}
+                     Invoice number: {ocr_result} \n
                      prize: {check_result}
                      """
         else:
