@@ -2,6 +2,8 @@ import os
 import re
 import time
 import json
+import requests
+from bs4 import BeautifulSoup
 from imgur_python import Imgur
 from datetime import datetime, timezone, timedelta
 from flask import Flask, request, abort
@@ -18,9 +20,6 @@ from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from azure.cognitiveservices.vision.computervision.models import OperationStatusCodes
 from azure.cognitiveservices.vision.face import FaceClient
 from msrest.authentication import CognitiveServicesCredentials
-
-import requests
-from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 
