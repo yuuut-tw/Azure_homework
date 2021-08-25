@@ -301,10 +301,7 @@ def handle_content_message(event):
     elif len(ocr_result) > 0:
         if len(ocr_result) == 11:
             check_result = invoice_number_check(ocr_result)
-            output = f"""
-                     Invoice number: {ocr_result} \n
-                     prize: {check_result}
-                     """
+            output = "Invoice number: {0} \nprize: {1}".format(ocr_result, check_result)
         else:
             output = "License Plate: {}".format(ocr_result)
         link = link_ob
